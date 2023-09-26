@@ -9,7 +9,7 @@
 
 // Tokenizer
 
-enum class TokenType
+enum class TokenType         //Used for pushing the keywords
 {
     _return,
     int_lit,
@@ -66,7 +66,7 @@ std::vector<Token> tokenize(const std::string &str)
 {
 
     std::vector<Token> tokens;
-    std::string buf = "";
+    std::string buf = "";             //Stores our tokens
 
 
     for(int i = 0; i < str.length(); i++)
