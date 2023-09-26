@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/aaryan/Konpaira/ByteChaos/src/main.cpp
+iostream
+-
+fstream
+-
+sstream
+-
+string
+-
+optional
+-
+vector
+-
+
