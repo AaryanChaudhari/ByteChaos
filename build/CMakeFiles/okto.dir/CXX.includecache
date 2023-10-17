@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/aaryan/Konpaira/ByteChaos/src/generation.hpp
+./parser.hpp
+/home/aaryan/Konpaira/ByteChaos/src/parser.hpp
+
 /home/aaryan/Konpaira/ByteChaos/src/main.cpp
 iostream
 -
@@ -18,5 +22,27 @@ string
 optional
 -
 vector
+-
+./parser.hpp
+/home/aaryan/Konpaira/ByteChaos/src/parser.hpp
+./tokenization.hpp
+/home/aaryan/Konpaira/ByteChaos/src/tokenization.hpp
+./generation.hpp
+/home/aaryan/Konpaira/ByteChaos/src/generation.hpp
+
+/home/aaryan/Konpaira/ByteChaos/src/parser.hpp
+./tokenization.hpp
+/home/aaryan/Konpaira/ByteChaos/src/tokenization.hpp
+
+/home/aaryan/Konpaira/ByteChaos/src/tokenization.hpp
+iostream
+-
+string
+-
+optional
+-
+vector
+-
+sstream
 -
 

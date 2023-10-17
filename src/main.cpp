@@ -4,57 +4,11 @@
 #include <string>
 #include <optional>
 #include <vector>
+// #include "./parser.hpp"
+// #include "./tokenization.hpp"
+#include "./generation.hpp"
 
 
-
-// Tokenizer
-
-enum class TokenType         //Used for pushing the keywords
-{
-    _return,
-    int_lit,
-    semi
-};
-
-struct Token
-{
-    TokenType type;
-    std::optional<std::string> value{};
-};
-
-
-
-//Token To Assembly
-
-std::string token_to_assembly(const std::vector<Token> &tokens)   
-{
-    std::stringstream output;
-    output<<"global _start\n";
-    output<<"_start: \n";
- 
-
-
-    for(int i = 0; i < tokens.size(); i++)
-    {
-        const Token& token = tokens.at(i);
-        
-        if(token.type==TokenType::_return)
-        {            
-            if(i+1<tokens.size() && tokens.at(i+1).type == TokenType::int_lit)
-            {
-                if(i+2<tokens.size() && tokens.at(i+2).type == TokenType::semi)
-                {
-                    output << "    mov rax,60\n";
-                    output << "    mov rdi, " << tokens.at(i+1).value.value()<<"\n";
-                    output << "    syscall";
-                }
-            }
-        }
-    }
-
-    return output.str();
-
-}
 
 
 
@@ -62,82 +16,10 @@ std::string token_to_assembly(const std::vector<Token> &tokens)
 
 
 
-std::vector<Token> tokenize(const std::string &str)
-{
-
-    std::vector<Token> tokens;
-    std::string buf = "";             //Stores our tokens
+//Token To Assembly
 
 
-    for(int i = 0; i < str.length(); i++)
-    {
-        char c = str.at(i);                 //Also checks inbound errors 
-        
-        if(std::isalpha(c))
-        {
-            buf.push_back(c);
-            i++;
 
-                while(std::isalnum(str.at(i)))
-                {
-                    buf.push_back(str.at(i));                
-                    i++;
-                }
-                i--;
-
-            if(buf=="return")
-            {
-                tokens.push_back({.type=TokenType::_return});
-                buf.clear();
-            } 
-
-            else
-            {
-                std::cerr<<"Not a 'return' token"<<std::endl;
-                exit(EXIT_FAILURE);
-            }
-
-        }
-        else if (std::isspace(c))
-        {
-            continue;
-        }
-
-        else if(std::isdigit(c))
-        {
-            buf.push_back(c);
-            i++;
-
-                while(std::isdigit(str.at(i)))
-                {
-                    buf.push_back(str.at(i));
-                    i++;
-                }
-                i--;
-
-            tokens.push_back({.type=TokenType::int_lit,.value=buf});
-            buf.clear();
-        }
-
-        else if(c == ';')
-        {
-            tokens.push_back({.type=TokenType::semi});
-        }
-        
-        else
-        {
-            std::cerr<<"No Suitable Token Found"<<std::endl;
-            exit(EXIT_FAILURE);
-        }
-
-    
-    
-    
-    }
-
-    return tokens;
-
-}
 
 int main(int argc, char *argv[])
 
@@ -147,7 +29,7 @@ int main(int argc, char *argv[])
     if (argc != 2)
     {
         std::cerr << "No Input Files" << std::endl;
-        std::cerr << "Input Usage: ./build/nib <input.nib>" << std::endl;
+        std::cerr << "Input Usage: ./build/okto <input.okto>" << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -159,21 +41,38 @@ int main(int argc, char *argv[])
         contents = content_stream.str();
     }
 
-    
-    std::vector<Token> token = tokenize(contents); // Generate Tokens..
+    //Generate Tokens from input file 
 
-    std::string asem = token_to_assembly(token);
+    Tokenizer tokenizer(std::move(contents)); 
+    std::vector<Token> token = tokenizer.tokenize();
+
+
+    //Generate Parse Tree
+    Parser parsetree(std::move(token));        //Moves token to the private member variable
+    std::optional <NodeExit> tree = parsetree.parse();   //returns the root and the tree i.e. for now exit(expr)
+
+
+    //Generate Code using Tokens
+    
+    if(!tree.has_value())   //check if null i.e. Parse didnt return exit 
+    {
+        std::cerr<<"No exit statement found"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
+    
+    Generator c_generate(tree.value());         //Moves the root to the private member variable 
+    std::string asem = c_generate.generate();
 
     { 
-        std::fstream output("./src/main.asm",std::ios::out);
+        std::fstream output("./src/i_files/main.asm",std::ios::out);
         output << asem;
     
     }
 
-    system("nasm -felf64 ./src/main.asm");
-    system("ld -o main ./src/main.o");
+    system("nasm -felf64 ./src/i_files/main.asm");
+    system("ld -o ./src/i_files/main ./src/i_files/main.o");
     
 
     return EXIT_SUCCESS;
-    //Changed this
+    
 }
