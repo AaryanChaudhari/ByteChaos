@@ -36,7 +36,7 @@ public:
     inline std::vector<Token> tokenize()
     {
         std::vector<Token> tokens;
-        std::string buf = ""; // Stores our tokens
+        std::string buf = ""; // Stores our token
 
         while(peek().has_value())
 
