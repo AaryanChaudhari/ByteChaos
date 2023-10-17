@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/okto.dir/src/main.cpp.o  -o okto 

@@ -1,3 +1,0 @@
-/home/aaryan/Konpaira/ByteChaos/build/CMakeFiles/rebuild_cache.dir
-/home/aaryan/Konpaira/ByteChaos/build/CMakeFiles/edit_cache.dir
-/home/aaryan/Konpaira/ByteChaos/build/CMakeFiles/okto.dir
