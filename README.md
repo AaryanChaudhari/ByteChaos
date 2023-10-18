@@ -3,8 +3,7 @@
 
 ## Create a Build Directory
 ```console
-<font size="3"> foo@bar:~$ mkdir build  </font>
-
+foo@bar:~$ mkdir build
 ```
 
 
@@ -19,7 +18,7 @@ foo@bar:~$ cmake -B build/ -S .
 ```
 
 <details>
-  <summary>View CMake Output</summary>
+  <summary>View Output</summary>
 
 ```console
 -- The C compiler identification is GNU 9.4.0 
@@ -43,9 +42,34 @@ foo@bar:~$ cmake -B build/ -S .
 ```
 </details>
 
+### Build the Executable ' okto ' 
+
 ```console
-foo@bar:~$ cmake --build build/ 
+foo@bar:~$ cmake --build build/
 ```
+<details>
+  <summary>View Output</summary>
+  
+  ```console
+[ 50%] Building CXX object CMakeFiles/okto.dir/src/main.cpp.o
+[100%] Linking CXX executable okto
+[100%] Built target okto
+  ```
+</details>
+
+### Input your code with the  '.okto' extension
+
+```console
+foo@bar:~$ ./build/okto ./src/test.okto
+```
+
+### Run the Executable file
+
+```console
+foo@bar:~$ ./src/i_files/main
+```
+
+
 
 
 
