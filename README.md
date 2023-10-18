@@ -7,6 +7,11 @@ Welcome to the development branch of our Compiler project.
 - **Branch Name**: dev
 - **Status**: Still Undergoing Development
 
+## Grammar
+<img src = "https://github.com/AaryanChaudhari/ByteChaos/blob/dev/grammar/grammar.png?raw=true">
+
+
+
 ## Features in Progress
 
 - Adding Variables and Operators
