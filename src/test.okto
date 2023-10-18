@@ -1,1 +1,3 @@
-exit 100;
+let x = 10;
+
+exit (x);

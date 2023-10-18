@@ -99,16 +99,16 @@ class Parser{
         const std::vector<Token> m_tokens;
         size_t m_index = 0;           
         
-        [[nodiscard]] inline const std::optional<Token> peek(int ahead = 0)     //Return null if >=length of Tokens
+        [[nodiscard]] inline const std::optional<Token> peek(int offset = 0)     //Return null if >=length of Tokens
         
             {
-                if(m_index + 1 > m_tokens.size())
+                if(m_index + offset >= m_tokens.size())
                 {
                     return {};
                 }
                 else
                 {
-                    return m_tokens.at(m_index + ahead);
+                    return m_tokens.at(m_index + offset);
                 }
 
             }

@@ -59,7 +59,7 @@ public:
 
                 else
                 {
-                    std::cerr<<"Exit token doesnt exist"<<std::endl;
+                    std::cerr<<" Token not found for --> "<<buf<<std::endl;
                     exit(EXIT_FAILURE);
                 }
 
@@ -106,16 +106,16 @@ private:
     const std::string m_src;   //for the input file
     size_t m_index = 0;           //for storing the current character index
     
-    [[nodiscard]] inline const std::optional<char> peek(int ahead = 0)     //Return null if >=length  of file or current char
+    [[nodiscard]] inline const std::optional<char> peek(int offset = 0)     //Return null if >=length  of file or current char
     
         {
-            if(m_index + 1 > m_src.length())
+            if(m_index + offset >= m_src.length())
             {
                 return {};
             }
             else
             {
-                return m_src.at(m_index + ahead);
+                return m_src.at(m_index + offset);
             }
 
         }
