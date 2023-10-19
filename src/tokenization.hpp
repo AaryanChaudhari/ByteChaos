@@ -12,7 +12,9 @@ enum class TokenType // Used for pushing the keywords
 {
     exit,
     int_lit,
-    semi
+    semi,
+    open_paren,
+    closed_paren
 };
 
 struct Token
@@ -41,7 +43,7 @@ public:
         while(peek().has_value())
 
         {
-            if(std::isalpha(peek().value()))
+            if(std::isalpha(peek().value()))        //for any stmt
             {
                 buf.push_back(consume());
 
@@ -50,7 +52,7 @@ public:
                     buf.push_back(consume());
                 }
 
-                if(buf=="exit")
+                if(buf=="exit")              // 'exit'
                 {
                     tokens.push_back({.type = TokenType::exit});
                     buf.clear();
@@ -65,13 +67,20 @@ public:
 
             }
 
-            else if(std::isspace(peek().value()))
+            else if(std::isspace(peek().value()))   // 'space'
             {
                 consume();
                 continue;
             }
 
-            else if (std::isdigit(peek().value()))
+            else if(peek().value() == '(')     // '('
+            {
+                consume();
+                tokens.push_back({.type= TokenType::open_paren});
+                continue;
+            }
+
+            else if (std::isdigit(peek().value()))    // For numbers 
             {
                 buf.push_back(consume());
 
@@ -84,19 +93,27 @@ public:
                 continue;
             }
 
-            else if(peek().value() == ';')
+            else if(peek().value() == ')')      // ')'
+            {
+                consume();
+                tokens.push_back({.type = TokenType::closed_paren});
+                continue;
+            }
+
+            else if(peek().value() == ';')    // ';'
             {
                 consume();
                 tokens.push_back({.type = TokenType::semi});
                 continue;
             }
 
-            else{
-                std::cerr<<"No suitable token found"<<std::endl;
-                exit(EXIT_FAILURE);
-                
+            else
+            {
+                std::cerr<<"No suitable token found for --> "<<peek().value()<<std::endl;
+                exit(EXIT_FAILURE);   
             }
         }
+
         m_index = 0;
         return tokens;
     }

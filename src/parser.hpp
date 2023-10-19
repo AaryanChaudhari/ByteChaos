@@ -58,23 +58,48 @@ class Parser{
             std::optional <NodeExit> exit_node;
             while(peek().has_value())
             {
-
                 if(peek().value().type == TokenType::exit)
                 {
                     consume();
-                    if(auto node_expr = parse_expr())   // Node_expr becomes true when there is a value returned by parse_expr
+
+                    if (peek().has_value() && peek().value().type == TokenType::open_paren)
                     {
-                        exit_node = NodeExit{.expr = node_expr.value()};
+                        consume();
+
+                        if(auto node_expr = parse_expr())   // Node_expr becomes true when there is a value returned by parse_expr
+                        {
+
+                                if(peek().has_value() && peek().value().type == TokenType::closed_paren) 
+                                {
+                                    consume();
+                                    exit_node = NodeExit{.expr = node_expr.value()};   //store the value
+                                }
+
+                                else
+                                {
+                                    std::cerr<<"Missing a ')' "<<std::endl;
+                                    exit(EXIT_FAILURE);
+                                }
+                        }
+
+                        else
+                        {
+                            std::cerr<<"Invalid Expression"<<std::endl;
+                            exit(EXIT_FAILURE);
+                        }
+
                     }
 
                     else
                     {
-                        std::cerr<<"Invalid Expression"<<std::endl;
+                        std::cerr<<"Missing a '(' "<<std::endl;
                         exit(EXIT_FAILURE);
                     }
-                }
 
-                if(peek().has_value() || peek().value().type == TokenType::semi)
+
+                }
+                
+                if(peek().has_value() && peek().value().type == TokenType::semi)
                 {
                     consume();                      //consume semi colon so infinite loop doesnt occur :)
                 }
@@ -83,6 +108,7 @@ class Parser{
                     std::cerr<<"No semi colon found after exit (expr)"<<std::endl;
                     exit(EXIT_FAILURE);
                 }
+                
             }
 
             m_index = 0;
@@ -120,6 +146,7 @@ class Parser{
                 
                 return m_tokens.at(m_index++);
             }
+
 
 
 
