@@ -5,21 +5,33 @@
 class Generator{
 
     public:
-        inline  Generator(NodeExit root) 
-        : m_root(std::move(root))
+        inline  Generator(NodeProg prog) 
+        : m_prog(std::move(prog))
         {
 
         }
 
-        [[nodiscard]] const std::string  generate(){
-            
-            std::stringstream output;
 
+        [[nodiscard]] const std::string gen_stat(const NodeStmt &stmt)
+        {
+            
+        }
+
+        [[nodiscard]] const std::string  gen_prog(){
+             
+            std::stringstream output;
             output<<"global _start\n";
             output<<"_start: \n";
+            
+            for(const NodeStmt stmt: m_prog.stmt)
+            {
+                output<<gen_stat(stmt);
+            }
+
+
 
             output << "    mov rax,60\n";
-            output << "    mov rdi, " << m_root.expr.int_lit.value.value()<<"\n";
+            output << "    mov rdi,0\n";
             output << "    syscall";
 
             return output.str();        
@@ -27,7 +39,7 @@ class Generator{
         }
 
     private:
-    const NodeExit m_root;
+    const NodeProg m_prog;
 
 
 };

@@ -8,13 +8,18 @@
 
 // Tokenizer
 
+
+
 enum class TokenType // Used for pushing the keywords
 {
     exit,
     int_lit,
     semi,
     open_paren,
-    closed_paren
+    closed_paren,
+    ident,
+    let,
+    eq
 };
 
 struct Token
@@ -59,11 +64,25 @@ public:
                     continue;
                 }
 
-                else
+                else if(buf=="let")
                 {
-                    std::cerr<<" Token not found for --> "<<buf<<std::endl;
-                    exit(EXIT_FAILURE);
+                    tokens.push_back({.type = TokenType::let});
+                    buf.clear();
+                    continue;
                 }
+
+                else                       // ' any character'
+                {
+                    tokens.push_back({.type = TokenType::ident, .value = buf});
+                    buf.clear();
+                    continue;
+                }
+
+                // else
+                // {
+                //     std::cerr<<" Token not found for --> "<<buf<<std::endl;
+                //     exit(EXIT_FAILURE);
+                // }
 
             }
 
@@ -104,6 +123,13 @@ public:
             {
                 consume();
                 tokens.push_back({.type = TokenType::semi});
+                continue;
+            }
+
+            else if(peek().value() == '=')
+            {
+                consume();
+                tokens.push_back({.type = TokenType::eq});
                 continue;
             }
 
